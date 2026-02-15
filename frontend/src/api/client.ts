@@ -1,7 +1,7 @@
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000';
+const API_BASE = import.meta.env.VITE_API_BASE || '/api';
 
 export const apiFetch = async <T>(path: string, options: RequestInit = {}, token?: string): Promise<T> => {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${API_BASE}${path.replace(/^\/api/, '')}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -10,10 +10,12 @@ export const apiFetch = async <T>(path: string, options: RequestInit = {}, token
     }
   });
 
-  const data = await response.json();
+  const contentType = response.headers.get('content-type') || '';
+  const data = contentType.includes('application/json') ? await response.json() : null;
+
   if (!response.ok) {
-    throw new Error(data.message || 'Request failed');
+    throw new Error(data?.message || `Request failed (${response.status})`);
   }
 
-  return data;
+  return data as T;
 };

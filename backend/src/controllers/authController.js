@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { loginUser, registerUser } from '../services/authService.js';
+import { HttpError } from '../utils/errors.js';
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -13,21 +14,21 @@ const loginSchema = z.object({
 });
 
 export const register = async (req, res) => {
-  try {
-    const payload = registerSchema.parse(req.body);
-    const session = await registerUser(payload);
-    return res.status(201).json(session);
-  } catch (error) {
-    return res.status(400).json({ message: error.message });
+  const parsed = registerSchema.safeParse(req.body);
+  if (!parsed.success) {
+    throw new HttpError(400, parsed.error.errors[0]?.message || 'Invalid input');
   }
+
+  const session = await registerUser(parsed.data);
+  return res.status(201).json(session);
 };
 
 export const login = async (req, res) => {
-  try {
-    const payload = loginSchema.parse(req.body);
-    const session = await loginUser(payload);
-    return res.json(session);
-  } catch (error) {
-    return res.status(400).json({ message: error.message });
+  const parsed = loginSchema.safeParse(req.body);
+  if (!parsed.success) {
+    throw new HttpError(400, parsed.error.errors[0]?.message || 'Invalid input');
   }
+
+  const session = await loginUser(parsed.data);
+  return res.json(session);
 };

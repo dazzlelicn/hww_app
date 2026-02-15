@@ -26,6 +26,8 @@ npm install
 npm run dev
 ```
 
+> 默认通过 Vite 代理 `/api` 到 `http://localhost:4000`。
+
 ## 2. Docker 一键运行
 
 ```bash
@@ -51,6 +53,8 @@ bash scripts/deploy_ecs.sh
 ## 4. 现有功能
 
 - 用户注册/登录
+- Session 本地持久化与退出登录
 - 认证后访问功能管理面板
-- 新增功能项、启用/禁用开关
-- 前后端鉴权联动
+- 功能项新增、启用/禁用开关
+- 功能查询与开关按 owner 隔离（admin 角色可查看全部）
+- 前后端鉴权联动 + 错误处理中间件

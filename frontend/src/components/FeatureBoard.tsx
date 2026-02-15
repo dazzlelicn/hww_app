@@ -9,11 +9,12 @@ export type Feature = {
 
 type Props = {
   features: Feature[];
+  loading: boolean;
   onCreate: (payload: { title: string; description: string; enabled: boolean }) => Promise<void>;
   onToggle: (id: number) => Promise<void>;
 };
 
-export default function FeatureBoard({ features, onCreate, onToggle }: Props) {
+export default function FeatureBoard({ features, loading, onCreate, onToggle }: Props) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [enabled, setEnabled] = useState(false);
@@ -38,6 +39,8 @@ export default function FeatureBoard({ features, onCreate, onToggle }: Props) {
           新建功能
         </button>
       </div>
+      {loading && <p>加载中...</p>}
+      {!loading && features.length === 0 && <p>暂无功能，先创建一个吧。</p>}
       <ul>
         {features.map((feature) => (
           <li key={feature.id} className="feature-item">

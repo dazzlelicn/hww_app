@@ -9,6 +9,16 @@ export default function AuthPanel({ onSubmit }: Props) {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const submit = async () => {
+    setSubmitting(true);
+    try {
+      await onSubmit({ email: email.trim(), name: name.trim(), password }, mode);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <section className="panel">
@@ -18,7 +28,7 @@ export default function AuthPanel({ onSubmit }: Props) {
       )}
       <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="邮箱" />
       <input value={password} type="password" onChange={(e) => setPassword(e.target.value)} placeholder="密码" />
-      <button onClick={() => onSubmit({ email, name, password }, mode)}>提交</button>
+      <button disabled={submitting} onClick={submit}>{submitting ? '提交中...' : '提交'}</button>
       <button className="link" onClick={() => setMode(mode === 'login' ? 'register' : 'login')}>
         切换到{mode === 'login' ? '注册' : '登录'}
       </button>
