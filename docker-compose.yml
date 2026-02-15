@@ -1,0 +1,40 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: hww_app
+      POSTGRES_USER: hww_user
+      POSTGRES_PASSWORD: hww_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./deploy/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - '5432:5432'
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      PORT: 4000
+      CORS_ORIGIN: http://localhost:5173
+      JWT_SECRET: change-in-production
+      DB_PROVIDER: postgresql
+      DATABASE_URL: postgresql://hww_user:hww_password@db:5432/hww_app?schema=public
+    ports:
+      - '4000:4000'
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '5173:80'
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

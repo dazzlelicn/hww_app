@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = env("DB_PROVIDER")
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         String    @default("user")
+  features     Feature[]
+  createdAt    DateTime  @default(now())
+}
+
+model Feature {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  enabled     Boolean  @default(false)
+  ownerId     Int
+  owner       User     @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime @default(now())
+}
