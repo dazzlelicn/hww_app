@@ -20,7 +20,6 @@ services:
       PORT: 4000
       CORS_ORIGIN: http://localhost:5173
       JWT_SECRET: change-in-production
-      DB_PROVIDER: postgresql
       DATABASE_URL: postgresql://hww_user:hww_password@db:5432/hww_app?schema=public
     ports:
       - '4000:4000'

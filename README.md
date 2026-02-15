@@ -3,12 +3,17 @@
 基于前端原型扩展为可运行的完整系统：
 - 前端（React + Vite）
 - 后端（Node.js + Express + Prisma）
-- 数据库（PostgreSQL for ECS, SQLite for local quick start）
+- 数据库（PostgreSQL）
 - ECS 部署脚本（Docker Compose）
 
 ## 1. 本地开发
 
-### Backend
+### 1.1 先启动 PostgreSQL（推荐用 Docker）
+```bash
+docker compose up -d db
+```
+
+### 1.2 Backend
 ```bash
 cd backend
 cp .env.example .env
@@ -18,7 +23,7 @@ npx prisma db push
 npm run dev
 ```
 
-### Frontend
+### 1.3 Frontend
 ```bash
 cd frontend
 cp .env.example .env
