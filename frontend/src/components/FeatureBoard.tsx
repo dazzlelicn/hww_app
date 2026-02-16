@@ -18,6 +18,9 @@ export default function FeatureBoard({ features, loading, onCreate, onToggle }: 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [enabled, setEnabled] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const createDisabled = submitting || !title.trim();
 
   return (
     <section className="panel">
@@ -29,14 +32,20 @@ export default function FeatureBoard({ features, loading, onCreate, onToggle }: 
           <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} /> 默认开启
         </label>
         <button
+          disabled={createDisabled}
           onClick={async () => {
-            await onCreate({ title, description, enabled });
-            setTitle('');
-            setDescription('');
-            setEnabled(false);
+            setSubmitting(true);
+            try {
+              await onCreate({ title, description, enabled });
+              setTitle('');
+              setDescription('');
+              setEnabled(false);
+            } finally {
+              setSubmitting(false);
+            }
           }}
         >
-          新建功能
+          {submitting ? '提交中...' : '新建功能'}
         </button>
       </div>
       {loading && <p>加载中...</p>}
@@ -48,7 +57,9 @@ export default function FeatureBoard({ features, loading, onCreate, onToggle }: 
               <strong>{feature.title}</strong>
               <p>{feature.description}</p>
             </div>
-            <button onClick={() => onToggle(feature.id)}>{feature.enabled ? '已启用' : '已禁用'}</button>
+            <button disabled={loading} onClick={() => onToggle(feature.id)}>
+              {feature.enabled ? '已启用' : '已禁用'}
+            </button>
           </li>
         ))}
       </ul>

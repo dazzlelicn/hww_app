@@ -70,16 +70,25 @@ export default function App() {
 
   const createFeature = async (payload: { title: string; description: string; enabled: boolean }) => {
     if (!session) return;
-    await apiFetch('/api/features', { method: 'POST', body: JSON.stringify(payload) }, session.token);
-    await loadFeatures(session.token);
-    setMessage('功能创建成功。');
+    try {
+      await apiFetch('/api/features', { method: 'POST', body: JSON.stringify(payload) }, session.token);
+      await loadFeatures(session.token);
+      setMessage('功能创建成功。');
+    } catch (error) {
+      setMessage((error as Error).message);
+      throw error;
+    }
   };
 
   const toggleFeature = async (id: number) => {
     if (!session) return;
-    await apiFetch(`/api/features/${id}/toggle`, { method: 'PATCH' }, session.token);
-    await loadFeatures(session.token);
-    setMessage('功能状态已更新。');
+    try {
+      await apiFetch(`/api/features/${id}/toggle`, { method: 'PATCH' }, session.token);
+      await loadFeatures(session.token);
+      setMessage('功能状态已更新。');
+    } catch (error) {
+      setMessage((error as Error).message);
+    }
   };
 
   return (

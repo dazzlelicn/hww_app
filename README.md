@@ -41,6 +41,7 @@ docker compose up -d --build
 
 - Frontend: http://localhost:5173
 - Backend health: http://localhost:4000/health
+- Backend DB health: http://localhost:4000/health/db
 
 ## 3. 阿里云 ECS 部署建议
 
@@ -63,3 +64,10 @@ bash scripts/deploy_ecs.sh
 - 功能项新增、启用/禁用开关
 - 功能查询与开关按 owner 隔离（admin 角色可查看全部）
 - 前后端鉴权联动 + 错误处理中间件
+
+## 5. 已修复的风险点（本轮）
+
+- 修复 Feature 创建时 `enabled` 参数的隐式类型转换风险（避免字符串 `"false"` 被当作 `true`）。
+- 增强 JWT payload 校验，避免结构异常 token 进入业务逻辑。
+- 增加 compose 健康检查和 ECS 部署脚本健康等待逻辑，降低“容器已启动但服务未就绪”风险。
+- 限制 JSON body 大小（1MB），减少异常大包请求风险。
