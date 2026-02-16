@@ -1,0 +1,50 @@
+:root {
+  font-family: Inter, system-ui, Arial, sans-serif;
+}
+body {
+  margin: 0;
+  background: #f5f7fb;
+}
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+header {
+  margin-bottom: 1rem;
+}
+.panel {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+input {
+  padding: 0.6rem;
+  margin: 0.3rem;
+}
+button {
+  padding: 0.6rem 1rem;
+  margin: 0.3rem;
+  border-radius: 8px;
+  border: none;
+  background: #2663eb;
+  color: white;
+}
+button.link {
+  background: transparent;
+  color: #2663eb;
+}
+.create-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.feature-item {
+  display: flex;
+  justify-content: space-between;
+  background: #f3f6ff;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+}
